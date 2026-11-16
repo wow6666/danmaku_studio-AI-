@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danmaku Studio Guide</title>
+<meta name="description" content="Danmaku Studio: quick guide and full manual for burning bilibili, AcFun, Ani Gamer and Niconico danmaku into video">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><div class="logo" aria-hidden="true">▶</div><div><b>Danmaku Studio</b><small>v2.5</small></div></div>
+  <div class="langs" aria-label="Language"><a href="index.html" lang="zh-Hant">繁中</a><a href="zh-hans.html" lang="zh-Hans">简中</a><a href="en.html" aria-current="true" lang="en">EN</a></div>
+  <details class="mtoc" open><summary>Contents</summary>
+  <nav class="toc" aria-label="Contents">
+    <ul>
+      <li><a class="part" href="#part-quick">Quick guide</a>
+        <ul>
+          <li><a href="#tips">Tips</a></li>
+          <li><a href="#cautions">Before you start</a></li>
+          <li><a href="#keys">Shortcuts</a></li>
+          <li><a href="#advanced">More things to do</a></li>
+          <li><a href="#components">Components</a></li>
+        </ul></li>
+      <li><a class="part" href="#part-full">Full manual</a>
+        <ul>
+          <li><a href="#about">What it does</a></li>
+          <li><a href="#install">Install</a></li>
+          <li><a href="#quick">Five steps</a></li>
+          <li><a href="#ui">The window</a></li>
+          <li><a href="#bili">bilibili / AcFun page</a></li>
+          <li><a href="#baha">Ani Gamer page</a></li>
+          <li><a href="#nico">Niconico page</a></li>
+          <li><a href="#filter">Filters page</a></li>
+          <li><a href="#output">Output page</a></li>
+          <li><a href="#preview">Preview and test clips</a></li>
+          <li><a href="#download">Download danmaku</a></li>
+          <li><a href="#convert">Convert</a></li>
+          <li><a href="#schedule">Scheduler</a></li>
+          <li><a href="#login">Login and cookies</a></li>
+          <li><a href="#faq">FAQ</a></li>
+          <li><a href="#versions">Version history</a></li>
+        </ul></li>
+      <li><a class="part" href="#others">Links</a></li>
+    </ul>
+  </nav>
+  </details>
+</aside>
+
+<main>
+<h1>Danmaku Studio quick guide and manual</h1>
+<em class="ver">For v2.5 preview (2026-11-16). Part 1 is the quick guide, part 2 the full manual. Download from <a href="https://github.com/wow6666/danmaku_studio-AI-/releases">GitHub Releases</a>. Switch the program to English with the EN button at the top right.</em>
+
+<div class="search" role="search">
+  <div class="box"><span aria-hidden="true">🔍</span>
+    <input id="q" type="search" placeholder="Search settings or problems, e.g. spacing, NVENC, 429, GIF, font size" autocomplete="off" aria-label="Search this guide" aria-controls="results">
+    <span class="hint" id="qcount"></span></div>
+  <div class="chips" aria-label="Popular searches">
+    <button type="button">Line spacing</button><button type="button">NVENC</button><button type="button">Font size</button><button type="button">GIF</button><button type="button">SESSDATA</button><button type="button">429</button><button type="button">Resume</button><button type="button">Anti-overlap</button><button type="button">History</button><button type="button">Scheduler</button><button type="button">ASS</button><button type="button">Shortcuts</button>
+  </div>
+  <ul class="results" id="results" hidden></ul>
+</div>
+
+<section class="wizard" id="wizard" aria-label="Troubleshooter">
+  <h3>🧭 I have a problem</h3>
+  <div class="wbody"></div>
+</section>
+
+<h1 id="part-quick" class="part-title">Part 1: Quick guide</h1>
+<em class="ver">If you only want the essentials, this part is enough. Part 2 explains every setting with screenshots.</em>
+
+<h2 id="tips">Tips</h2>
+<ul>
+  <li>First time: pick a video → pick danmaku → set the output → press <code>● Render now</code>. The defaults work.</li>
+  <li>Before a long render, press <code>✂ Test clip</code> to render 10 seconds and check the result.</li>
+  <li>Few danmaku, all at the top → raise <code>Line spacing %</code> (150–200) or set the distribution to <code>Spread evenly</code>.</li>
+  <li>Too many, piled up → turn on <code>Anti-overlap</code> or <code>Auto-shrink</code>, or set a limit on the Filters page.</li>
+  <li>Want to keep every danmaku → Filters page → <code>★ Keep all danmaku</code>.</li>
+  <li>Low-resolution video → <code>Upscale</code> 2 makes the text much sharper.</li>
+  <li>No danmaku file → <code>⬇ Download</code> and paste a BV, ac, sn or sm number.</li>
+  <li>🔺 Every setting has an <code>ⓘ</code>; hover it for an explanation.</li>
+</ul>
+
+<h2 id="cautions">Before you start</h2>
+<ul>
+  <li class="warn">Install Python, FFmpeg and Playwright first, or the program won't run!</li>
+  <li>Commands: <code>pip install playwright</code>, <code>playwright install chromium</code>, <code>winget install -e --id Gyan.FFmpeg</code></li>
+  <li>NVENC on a GTX 10 series card (e.g. 1050): driver 570–580 and an <b>FFmpeg release of 8.0 or older</b>, not the latest development build.</li>
+  <li>With an ASS subtitle file, fonts and sizes come from the file and all style pages are locked; edit it in Aegisub.</li>
+  <li>Only the page for the loaded site can be changed; the others turn grey.</li>
+  <li><b>Never share</b> SESSDATA, user_session or your Ani Gamer cookie with anyone or any other site.</li>
+  <li>Ani Gamer files have no send dates, so Filters → cutoff doesn't apply to them.</li>
+  <li>Full-history danmaku (tens of thousands) render slowly and keep the CPU busy. That's normal.</li>
+  <li>Niconico download and browser login are still being tested; post the log on GitHub if they fail.</li>
+</ul>
+
+<h2 id="keys">Shortcuts</h2>
+<ul>
+  <li><b>Live preview player (browser)</b>
+    <ul>
+      <li><kbd>Space</kbd> play / pause (or click the video)</li>
+      <li><kbd>←</kbd> <kbd>→</kbd> back / forward 5 s</li>
+      <li><kbd>[</kbd> <kbd>]</kbd> change speed</li>
+      <li><kbd>D</kbd> danmaku on/off　<kbd>H</kbd> show/hide count and FPS　<kbd>F</kbd> fullscreen (or double-click)</li>
+    </ul></li>
+  <li><b>ASS preview (ffplay)</b>: <kbd>Space</kbd> pause　<kbd>←</kbd> <kbd>→</kbd> 5 s　<kbd>↑</kbd> <kbd>↓</kbd> 1 min　<kbd>9</kbd> <kbd>0</kbd> volume　<kbd>M</kbd> mute　<kbd>S</kbd> frame step　<kbd>F</kbd> fullscreen</li>
+  <li><b>Program window</b>: <kbd>Enter</kbd> in the download URL box starts the download; in dialogs <kbd>Enter</kbd> presses the main button and <kbd>Esc</kbd> closes.</li>
+  <li><b>This page</b>: <kbd>/</kbd> search　<kbd>↑</kbd> <kbd>↓</kbd> pick a result　<kbd>Enter</kbd> go　<kbd>Esc</kbd> clear</li>
+</ul>
+
+<h2 id="advanced">More things to do</h2>
+<ul>
+  <li><b>Merge danmaku files</b>: Extra danmaku → Add…; files of the same kind are merged and duplicates removed.</li>
+  <li><b>Batch rendering</b>: Toolbox → Scheduler; set cores and batch per task, press <code>Check</code>, then <code>Start</code>.</li>
+  <li><b>Start later, shut down when done</b>: Start at / When all done on the scheduler page.</li>
+  <li><b>Convert formats</b>: Toolbox → Convert between XML, JSON and ASS, or merge several files.</li>
+  <li><b>bilibili history</b>: choose Full history on the download page; set a date range and a cooldown per day. Needs a login.</li>
+  <li><b>Older Niconico comments</b>: the multiplier on the download page. Needs a Niconico login.</li>
+  <li><b>No more copying cookies</b>: press <code>🌐 Log in</code> next to the field and log in in the browser that opens.</li>
+  <li><b>Interrupted?</b> With <code>Resume interrupted renders</code> on, render again with the same settings and it continues.</li>
+  <li><b>Several setups</b>: save and apply them with Presets in the title bar.</li>
+</ul>
+
+<h2 id="components">Components</h2>
+<ul class="comp">
+  <li><b>Programs</b></li>
+  <li>☑ <b>danmaku_studio.py</b> <span class="tag">&lt;2.5&gt;</span> — the program, tkinter UI</li>
+  <li>☑ <b>Python</b> <span class="tag">&lt;3.9+&gt;</span> — runtime</li>
+  <li>☑ <b>FFmpeg / ffprobe / ffplay</b> <span class="tag">&lt;required&gt;</span> — encoding, video info, ASS preview</li>
+  <li>☑ <b>Playwright + Chromium</b> <span class="tag">&lt;required&gt;</span> — frame capture and the login browser; falls back to Chrome / Edge</li>
+  <li><b>Built-in engines</b></li>
+  <li>☑ <b>libass</b> <span class="tag">&lt;in FFmpeg&gt;</span> — fast rendering of normal danmaku</li>
+  <li>☑ <b>Layout engine</b> <span class="tag">&lt;built in&gt;</span> — anti-overlap, line spacing, auto-shrink</li>
+  <li>☑ <b>as3-danmaku</b> <span class="tag">&lt;MIT&gt;</span> — bilibili code danmaku, mode 8 (formerly Flash)</li>
+  <li>☑ <b>bas.js</b> <span class="tag">&lt;downloaded on first use&gt;</span> — bilibili BAS danmaku, mode 9</li>
+  <li>☑ <b>niconicomments</b> <span class="tag">&lt;MIT&gt;</span> — Niconico layout and comment art (CA)</li>
+  <li><b>Danmaku sources</b></li>
+  <li>☑ <b>bilibili</b> <span class="tag">&lt;XML, seg.so, BAS packs&gt;</span> — normal, advanced, code and BAS danmaku</li>
+  <li>☑ <b>AcFun</b> <span class="tag">&lt;JSON, old and new&gt;</span> — uses the bilibili page</li>
+  <li>☑ <b>Ani Gamer (Bahamut)</b> <span class="tag">&lt;XML, JSON&gt;</span> — up to about 3001 per episode</li>
+  <li>☑ <b>Niconico</b> <span class="tag">&lt;XML, JSON&gt;</span> — official comment counts, CA</li>
+  <li>☑ <b>ASS subtitles</b> <span class="tag">&lt;.ass&gt;</span> — rendered as written</li>
+  <li><b>Output</b></li>
+  <li>☑ <b>Burned-in video</b> <span class="tag">&lt;MP4, MKV, MOV, AVI, GIF&gt;</span> — H.264 / H.265, CPU or NVENC</li>
+  <li>☑ <b>Transparent layer</b> <span class="tag">&lt;ProRes 4444 .mov, WebM VP9&gt;</span> — for editing software</li>
+  <li>☑ <b>Danmaku files</b> <span class="tag">&lt;bilibili / Ani Gamer / Niconico XML, JSON, ASS&gt;</span> — Convert tool</li>
+  <li>☑ <b>Drop list, analysis CSV</b> <span class="tag">&lt;.csv&gt;</span> — blocked danmaku, density per second</li>
+</ul>
+
+<h1 id="part-full" class="part-title">Part 2: Full manual</h1>
+
+<h2 id="about">What it does</h2>
+<ul>
+  <li>Burns danmaku from <b>bilibili, AcFun, Ani Gamer and Niconico</b> and <b>ASS subtitles</b> into video, keeping advanced, BAS and code danmaku effects.</li>
+  <li>Made by 蔡星星のACG俱樂部 (wow6666) together with AI.</li>
+</ul>
+<h3 id="why">Why burn danmaku in</h3>
+<ul>
+  <li>Playing full-history danmaku live in bililocal stutters or crashes: special and BAS danmaku are heavy on the CPU.</li>
+  <li>To keep up, live players drop many effects and only slide plain text.</li>
+  <li>Burned into the video, playback is smooth and every effect is there. The same video (sm212213, about 40,000 comments):</li>
+</ul>
+<div class="pair">
+  <figure><img src="images/common/cmp_bililocal.jpg" alt="bililocal live rendering" loading="lazy"><figcaption>bililocal live rendering: rough scrolling, many effects dropped.</figcaption></figure>
+  <figure><img src="images/common/cmp_burned.jpg" alt="Rendered with Danmaku Studio" loading="lazy"><figcaption>Danmaku Studio render: effects and typography intact, smooth playback.</figcaption></figure>
+</div>
+<h3 id="why-not-ass">Why not just convert to ASS</h3>
+<ul>
+  <li>Tools like DanmakuFactory handle special formats poorly: conversion often fails or effects disappear.</li>
+  <li>This tool <b>draws danmaku in a browser, captures each frame and overlays it with FFmpeg</b>, so CSS effects and fonts survive.</li>
+</ul>
+<h3 id="hybrid">Hybrid rendering (why it's fast)</h3>
+<div class="flow" role="img" aria-label="Hybrid rendering: normal danmaku go to libass, special danmaku to the browser, FFmpeg combines them">
+  <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+    <g fill="none" stroke="var(--muted)" stroke-width="1.3">
+      <path d="M168 115H210V56H262" marker-end="url(#ar)"/><path d="M168 115H210V174H262" marker-end="url(#ar)"/>
+      <path d="M478 56H520V103H560" marker-end="url(#ar)"/><path d="M478 174H520V127H560" marker-end="url(#ar)"/>
+    </g>
+    <rect x="20" y="85" width="148" height="60" rx="6" fill="var(--bg)" stroke="var(--muted)"/>
+    <text x="94" y="111" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Danmaku file</text>
+    <text x="94" y="131" text-anchor="middle" font-size="12" fill="var(--muted)">XML / JSON / ASS</text>
+    <rect x="264" y="24" width="214" height="64" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+    <text x="371" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Normal → libass</text>
+    <text x="371" y="71" text-anchor="middle" font-size="12" fill="var(--muted)">scrolling, top, bottom: fast</text>
+    <rect x="264" y="142" width="214" height="64" rx="6" fill="var(--bg)" stroke="var(--pink)" stroke-width="1.8"/>
+    <text x="371" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">Special → browser</text>
+    <text x="371" y="189" text-anchor="middle" font-size="12" fill="var(--muted)">mode 7/8/9, Niconico CA: per frame</text>
+    <rect x="562" y="85" width="178" height="60" rx="6" fill="var(--bg)" stroke="var(--muted)"/>
+    <text x="651" y="111" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">FFmpeg combines</text>
+    <text x="651" y="131" text-anchor="middle" font-size="12" fill="var(--muted)">segments on all cores</text>
+  </svg>
+</div>
+<ul>
+  <li>Normal danmaku: the browser only measures and places text; libass in FFmpeg draws it.</li>
+  <li>Advanced (mode 7), code (mode 8, formerly Flash), BAS (mode 9) and Niconico comment art: captured frame by frame in the browser.</li>
+  <li>The video is split into 10–60 s segments rendered in parallel, then joined losslessly; interrupted renders can resume.</li>
+</ul>
+
+<h2 id="install">Install</h2>
+<ul>
+  <li class="warn">Install Python, FFmpeg and Playwright first, or the program won't run!</li>
+  <li><b>Python 3.9 or newer</b> from <a href="https://www.python.org/downloads/">python.org</a>; tick "Add python.exe to PATH".</li>
+  <li><b>Playwright and a browser</b>:
+<pre>pip install playwright
+playwright install chromium</pre>
+    Without Chromium, Chrome or Edge on your PC is used.</li>
+  <li><b>FFmpeg (with ffprobe and ffplay)</b>:
+<pre>winget install -e --id Gyan.FFmpeg</pre>
+    Reopen the command prompt; <code>ffmpeg -version</code> should print a version.</li>
+  <li><b>Run</b>: <code>python danmaku_studio.py</code></li>
+  <li>🔺 <b>NVENC on a GTX 10 series card (e.g. GTX 1050)</b>: these cards stop at driver 580. Use driver 570–580 with an <b>FFmpeg release of 8.0 or older</b>; the latest development builds need driver 610, which these cards can't install. Output → Encoder → Test shows the reason.</li>
+  <li class="muted">Author's test PC: Intel Core i7-9700, 16 GB DDR4, GTX 1050, Windows 11 25H2.</li>
+</ul>
+
+<h2 id="quick">Five steps</h2>
+<ol>
+  <li><b>Pick files</b>: under Get danmaku, choose the video, danmaku file and output. The green line shows the type and counts (e.g. "bilibili XML: scrolling 60, code 3"). No file? Press <code>⬇ Download</code>.</li>
+  <li><b>Adjust</b>: the program detects the source and unlocks only its page (bilibili / AcFun, Ani Gamer, Niconico); the rest turn grey.</li>
+  <li><b>Preview</b>: <code>▶ Live preview</code> in the browser, or <code>🖼 Frame preview</code> for one moment.</li>
+  <li><b>Test</b>: <code>✂ Test clip</code> renders a few seconds as MP4 or GIF.</li>
+  <li><b>Render</b>: <code>● Render now</code>; <code>■ Stop all</code> stops, and with resume on it continues next time.</li>
+</ol>
+<figure><img src="images/en/actions.jpg" alt="Action bar" loading="lazy"><figcaption>Action bar: ① Live preview　② Frame preview　③ Test clip　④ Render now　⑤ Schedule</figcaption></figure>
+
+<h2 id="ui">The window</h2>
+<figure><img src="images/en/ui_main.jpg" alt="Main window" loading="lazy"><figcaption>① Get danmaku　② Settings sidebar　③ Settings page　④ Action bar　⑤ Queue and log</figcaption></figure>
+<ul>
+  <li><b>Title bar</b>: click ▶ at the top left for version info; Presets, ⟲ Reset and the 繁中 / EN switch are on the right.</li>
+  <li><b>① Get danmaku</b>: video, danmaku, output and extra danmaku (merged); shortcuts to Convert, Download and Toolbox.</li>
+  <li><b>② Sidebar</b>: bilibili / AcFun, Ani Gamer, Niconico, Filters, Output, Toolbox. Settings save automatically.</li>
+  <li><b>④ Action bar</b>: live preview, frame preview, test clip, render now, add to queue, run queue, schedule, stop all, open output folder.</li>
+  <li><b>⑤ Queue and log</b>: status, progress, live FPS, time left; the log explains every step and why danmaku were dropped.</li>
+  <li><b>⟲ Reset menu</b>: clear file paths, clear login cookies, log out and delete login browser data, reset all settings.</li>
+</ul>
+<figure><img src="images/en/dlg_about.jpg" alt="Version info" loading="lazy" style="max-width:520px"><figcaption>Click ▶: version, runtime, open-source projects and licences.</figcaption></figure>
+
+<h2 id="bili">bilibili / AcFun page</h2>
+<ul><li>Used for bilibili XML, bilibili protobuf (seg.so) and AcFun danmaku.</li></ul>
+<figure><img src="images/en/bili_text.jpg" alt="bilibili page: text, layout and count" loading="lazy"><figcaption>① Font size %　② Outline width %　③ Shadow　④ Scroll distribution　⑤ Anti-overlap and auto-shrink switches　⑥ Line spacing %</figcaption></figure>
+<ul>
+  <li><b>① Font size %</b>: 100 = original size; 0 = hide normal danmaku.</li>
+  <li><b>② Outline width %</b>: 100 = bilibili default (1/22 of the font size); 0 = none.</li>
+  <li><b>③ Shadow</b>: pixels at 1080p, scaled with the video height.</li>
+  <li><b>Symbol font</b>: fills in symbols like ☢★♪ that show as boxes.</li>
+  <li><b>Scroll duration</b> and <b>Display area %</b> (50 = top half only).</li>
+  <li><b>④ Scroll distribution</b>: top to bottom (bilibili default) or spread evenly.</li>
+  <li><b>Max on screen</b> and <b>Total limit</b> (no limit / pool limit in file / custom count).</li>
+  <li><b>⑤ Anti-overlap</b> (hide what doesn't fit), <b>Auto-shrink in dense parts</b>, <b>Turn top/bottom into scrolling</b>, <b>Top/bottom also avoid scrolling danmaku</b>.</li>
+  <li><b>⑥ Line spacing %</b> (50–300): 150–200 when few danmaku crowd the top; below 100 packs more rows.</li>
+</ul>
+<figure><img src="images/common/linegap.jpg" alt="Line spacing 200%" loading="lazy" style="max-width:640px"><figcaption>Line spacing 200%: more room between rows.</figcaption></figure>
+<figure><img src="images/en/bili_adv.jpg" alt="Advanced danmaku settings" loading="lazy"><figcaption>① Advanced / BAS / code danmaku switches　② When off-screen　③ Reference stage</figcaption></figure>
+<ul>
+  <li><b>①</b> Show or hide advanced (mode 7), BAS (mode 9) and code (mode 8) danmaku; advanced font size % and opacity %.</li>
+  <li><b>② When off-screen</b>: shrink and move into view, with a minimum size.</li>
+  <li><b>③ Reference stage</b>: Auto is recommended; 512x384, 540x384 and 672x438 are also available.</li>
+  <li><b>How font sizes scale</b>:
+    <ul>
+      <li>bilibili / AcFun / Ani Gamer: size × 1.6 × (video height ÷ 1080) × font size %, so <code>size 25 = 40 px at 1080p</code>.</li>
+      <li>Ani Gamer: files downloaded by this program use 18 / 25 / 36 (small / medium / large); the userscript always writes 25.</li>
+      <li>bilibili advanced danmaku: original size × stage scale × advanced font size % (a 672×438 stage at 1080p is about ×2.47).</li>
+      <li>Niconico: a 384 px tall stage with small / medium / large = 18 / 27 / 39 px, scaled to the video (about ×2.81 at 1080p).</li>
+    </ul></li>
+</ul>
+
+<h2 id="baha">Ani Gamer page</h2>
+<figure><img src="images/en/baha.jpg" alt="Ani Gamer page" loading="lazy"><figcaption>① Font size %　② Line spacing % (other settings match the bilibili page)</figcaption></figure>
+<ul>
+  <li>Ani Gamer danmaku use only this page, separate from bilibili.</li>
+  <li>Files record: time (to 0.1 s), position, colour and sender account.</li>
+  <li>No send dates → Filters → cutoff doesn't apply, and the total limit samples evenly.</li>
+  <li>The server returns at most about 3001 per episode.</li>
+</ul>
+
+<h2 id="nico">Niconico page</h2>
+<figure><img src="images/en/nico.jpg" alt="Niconico page" loading="lazy"><figcaption>① Comment count mode　② Layout mode　③ Font　④ Outline strength</figcaption></figure>
+<ul>
+  <li>Laid out with the open-source niconicomments library following the official player, so comment art (CA) stays intact.</li>
+  <li><b>① Comment count</b>: official rule (videos under 1 min 100, under 5 min 250, under 10 min 500, otherwise 1000, newest only) / multiplier (official × N) / custom count / all.</li>
+  <li><b>② Layout mode</b>: auto (by upload date) / HTML5 (new player) / Flash (old player).</li>
+  <li><b>③ Font</b>: "Official fonts (Arial + MS PGothic)" by default; bold only applies to other fonts.</li>
+  <li><b>④ Outline strength %</b>, <b>comment size %</b>, <b>opacity %</b>.</li>
+  <li>Demo video: <a href="https://www.nicovideo.jp/watch/sm212213">sm212213 "true my heart"</a>, about 40,000 comments.</li>
+</ul>
+
+<h2 id="filter">Filters page</h2>
+<figure><img src="images/en/filter.jpg" alt="Filters page" loading="lazy"><figcaption>① Blocked words　② Add common spam rules　③ Block by type　④ Keep all danmaku</figcaption></figure>
+<ul>
+  <li><b>① Blocked words</b>: one per line; <code>/…/</code> is a regular expression; lines starting with <code>#</code> are comments.</li>
+  <li><b>② Add common spam rules</b>: punctuation only, one character repeated, short phrases repeated.</li>
+  <li><b>③ Block by type</b>: scrolling, top, bottom, reverse.</li>
+  <li><b>Merge duplicates</b> (marked ×N), <b>length limit</b>, <b>time offset</b>, <b>cutoff</b> (only danmaku sent before a date).</li>
+  <li><code>Count what gets blocked</code> shows the effect first; <b>④ Keep all danmaku</b> turns off everything that drops danmaku.</li>
+  <li>A drop-list CSV can be written with every blocked danmaku and the reason.</li>
+</ul>
+
+<h2 id="output">Output page</h2>
+<figure><img src="images/en/output.jpg" alt="Output page" loading="lazy"><figcaption>① Output type　② Shorten on-screen time with speed　③ File format　④ Encoder and Test　⑤ Resume and cache location　⑥ NVENC sessions</figcaption></figure>
+<ul>
+  <li><b>① Output type</b>: burn into video, or a transparent layer (ProRes 4444 .mov, WebM VP9). File format is locked for transparent layers.</li>
+  <li><b>Upscale</b>: 2 for low-resolution videos.</li>
+  <li><b>Speed</b>: danmaku stay in sync with the video; <b>②</b> also shortens how long they stay on screen.</li>
+  <li><b>③ File format</b>: MP4, MKV, MOV, AVI, GIF. AVI holds H.264 only; GIF has no sound and is large, with adjustable width and frame rate.</li>
+  <li><b>④ Encoder</b>: H.264 / H.265 on CPU or NVENC; <code>Test</code> explains why one isn't available.</li>
+  <li><b>CRF</b>: lower is sharper; 18 is visually lossless. <b>Parallel workers</b>: about half your CPU cores.</li>
+  <li><b>⑤ Resume interrupted renders</b>: segments are kept in <code>C:\Users\you\.danmaku_studio\work\</code> and survive a restart; <code>Where is the cache?</code> opens it.</li>
+  <li><b>⑥ NVENC sessions</b>: 1–2 on 2 GB cards like the GTX 1050.</li>
+</ul>
+<figure><img src="images/common/speed.jpg" alt="2× speed sync test" loading="lazy" style="max-width:520px"><figcaption>2× speed test: output 30.2 s matches source 60.4 s; danmaku appear on time.</figcaption></figure>
+
+<h2 id="preview">Preview and test clips</h2>
+<ul>
+  <li><b>Live preview</b>: plays in the browser with a bilibili-style control bar (speed, ±5 s, volume, fullscreen, danmaku on/off, opacity), a density curve on the timeline, and the danmaku count and FPS.</li>
+  <li><b>ASS preview</b>: plays in ffplay; the shortcuts are in the window title.</li>
+  <li><b>Frame preview</b>: one moment, ±1 / ±5 s buttons, <code>Save as…</code> PNG or JPG.</li>
+  <li><b>Test clip</b>: renders the chosen seconds with all current settings as MP4 or GIF; play it or save it. Only the range and format come from the test dialog.</li>
+</ul>
+<div class="pair">
+  <figure><img src="images/en/dlg_still.jpg" alt="Frame preview" loading="lazy"><figcaption>Frame preview with save and test buttons.</figcaption></figure>
+  <figure><img src="images/en/dlg_clip.jpg" alt="Test clip" loading="lazy" style="max-width:320px"><figcaption>Test clip: from / to seconds, MP4 or GIF.</figcaption></figure>
+</div>
+
+<h2 id="download">Download danmaku</h2>
+<figure><img src="images/en/tools.jpg" alt="Toolbox" loading="lazy" style="max-width:640px"><figcaption>Toolbox: download, convert, scheduler, density analysis, analysis CSV, clear resume cache.</figcaption></figure>
+<figure><img src="images/en/dl_bili.jpg" alt="Download from bilibili" loading="lazy"><figcaption>① Site　② Range　③ Date range, max days, cooldown per day　④ Keep at most　⑤ When over　⑥ When a cookie expires</figcaption></figure>
+<ul>
+  <li>Paste a URL or ID; the site is detected, or choose it in <b>① Site</b>.</li>
+  <li><b>bilibili</b>: BV / av number or URL (add <code>?p=2</code> for parts). <b>② Range</b>: current pool or full history (every day merged); full history and BAS / code packs need SESSDATA.
+    <ul><li><b>③</b> History can be limited by date range and max days, with a cooldown per day; a failure keeps what was fetched.</li></ul></li>
+  <li><b>AcFun</b>: ac number or URL; no login.</li>
+  <li><b>Ani Gamer</b>: sn number or URL, up to about 3001; logging in may give more.</li>
+  <li><b>④ Keep at most</b> (shared by all sites) + <b>⑤ When over</b>: random evenly, or flatten peaks only; the Filters page can be applied before saving; Niconico uploader comments don't count.</li>
+  <li><b>⑥ When a cookie expires</b>: see <a href="#login">Login and cookies</a>.</li>
+</ul>
+<figure><img src="images/en/dl_nico.jpg" alt="Download from Niconico" loading="lazy" style="max-width:600px"><figcaption>① Multiplier　② Back from this time　③ Include other videos　④ user_session and 🌐 Log in　⑤ Save as XML / JSON</figcaption></figure>
+<ul>
+  <li><b>Niconico</b> (testing): sm / so / nm number or URL.
+    <ul>
+      <li><b>①</b> Same approach as コメント増量: when logged in, each thread is fetched backwards N times, up to 1000 each.</li>
+      <li><b>②</b> where to start going back; <b>③</b> add comments from other videos (e.g. <code>sm9×2</code>); optionally include かんたんコメント.</li>
+      <li>On 429 (too many requests) it waits and slows down; <b>⑤</b> saves XML or JSON.</li>
+    </ul></li>
+</ul>
+
+<h2 id="convert">Convert</h2>
+<figure><img src="images/en/convert.jpg" alt="Convert" loading="lazy"><figcaption>① Input files (format detected)　② Convert to　③ Merge into one file　④ Convert</figcaption></figure>
+<ul>
+  <li><b>Reads</b>: Ani Gamer / bilibili / Niconico XML, JSON (AcFun old and new, Ani Gamer, Niconico, this program's format), ASS, bilibili protobuf (seg.so / .bin).</li>
+  <li><b>Writes</b>: bilibili XML, Ani Gamer XML, Niconico XML, JSON (testing), ASS.</li>
+  <li>ASS to XML: <code>\move</code> / <code>\pos</code> decide scrolling, top or bottom; effect subtitles (rotation, fades, diagonal moves) are skipped and logged.</li>
+  <li>To ASS: fonts and layout come from the settings pages; enter the resolution (e.g. <code>1920x1080</code>).</li>
+  <li><b>③</b> Merging combines content only; <b>each file can't get its own time offset</b>.</li>
+  <li>"Apply the Filter page" removes unwanted danmaku while converting.</li>
+</ul>
+
+<h2 id="schedule">Scheduler</h2>
+<figure><img src="images/en/schedule.jpg" alt="Scheduler" loading="lazy" style="max-width:760px"><figcaption>① New task　② Task list (batch, cores, encoder, status)　③ Rules　④ Check and Start</figcaption></figure>
+<ol>
+  <li><b>① Add tasks</b>: <code>＋ New task…</code> to choose files, cores, batch and encoder, or add the current files. Other settings come from the settings pages at that moment.</li>
+  <li><b>③ Rules</b>: max parallel per batch, cooldown between batches, retry on failure, start time, sleep or shut down when done (60 s to cancel with <code>shutdown /a</code>).</li>
+  <li><b>④ Check</b>: checks numbers and files only (missing files, clashing outputs, too many cores, too many NVENC sessions).</li>
+  <li><b>④ Start</b>: checks again first and won't start with errors; each batch waits for the previous one plus the cooldown.</li>
+</ol>
+<figure><img src="images/en/dlg_task.jpg" alt="New task dialog" loading="lazy" style="max-width:540px"><figcaption>New task dialog.</figcaption></figure>
+
+<h2 id="login">Login and cookies</h2>
+<ul>
+  <li><code>🌐 Log in</code> (testing): log in once in the program's own browser and the cookie is filled in; no more F12 copying.</li>
+  <li>That browser is separate from your normal Chrome; its logins are kept in <code>.danmaku_studio\browser_login</code>. Remove them with ⟲ Reset → Log out and delete login browser data.</li>
+  <li>The cookies themselves stay in memory and aren't written to the settings file.</li>
+  <li class="warn">Never share SESSDATA, user_session or BAHARUNE with anyone or any third-party site!</li>
+  <li><b>When a cookie expires</b> (download page):
+    <ul>
+      <li>Renew in the background, ask me if that fails (default)</li>
+      <li>Open the browser so I can log in again</li>
+      <li>Ask me every time (log in / paste / stop)</li>
+      <li>Ask me to paste a new one</li>
+      <li>Stop and save what was fetched</li>
+    </ul></li>
+</ul>
+<figure><img src="images/en/dlg_cookie.jpg" alt="Cookie expired dialog" loading="lazy" style="max-width:520px"><figcaption>The pause dialog when a cookie expires; everything fetched so far is kept.</figcaption></figure>
+
+<h2 id="faq">FAQ</h2>
+<ul>
+  <li><b>NVENC doesn't work?</b> Output → Encoder → Test shows why. GTX 10 series: driver 570–580 with FFmpeg 8.0 or older, NVENC sessions 1–2. If it can't be used, the CPU takes over automatically.</li>
+  <li><b>Niconico keeps returning 429?</b> Cooldown 3–5 s, a smaller multiplier over several runs, don't run コメント増量 at the same time, and wait 10–30 minutes.</li>
+  <li><b>All style pages locked with ASS?</b> ASS fonts and sizes are fixed in the file; edit it in Aegisub.</li>
+  <li><b>"Unknown danmaku format"?</b> It's treated as bilibili danmaku and may load nothing or look wrong; test first, or convert it to bilibili XML.</li>
+  <li><b>Full history still overlaps?</b> Tens of thousands can't all fit: anti-overlap, auto-shrink, smaller line spacing or a total limit.</li>
+  <li><b>Everything at the top?</b> Line spacing 150–200, or spread evenly.</li>
+  <li><b>seg.so "corrupted"?</b> The file was saved as text and can't be recovered; download it again with Toolbox → Download.</li>
+  <li><b>Cache taking space?</b> It's in <code>.danmaku_studio\work\</code> and deleted when a render finishes; clear leftovers with Toolbox → Clear resume cache.</li>
+  <li><b>Known issues</b>:
+    <ul>
+      <li>Niconico download, browser login and NVENC aren't fully tested on real systems yet; please post logs on GitHub.</li>
+      <li>AcFun's own advanced danmaku format (mode 7) is skipped.</li>
+      <li>JSON output is still being tested.</li>
+    </ul></li>
+</ul>
+<figure><img src="images/en/dlg_warn.jpg" alt="Unknown format warning" loading="lazy" style="max-width:520px"><figcaption>The warning for an unknown danmaku format.</figcaption></figure>
+
+<h2 id="versions">Version history</h2>
+<ul>
+  <li><b>2.5 preview</b> <span class="tag">&lt;2026-11-16&gt;</span>
+    <ul>
+      <li>Fixed: pages that don't apply are now locked and greyed; the window is named "Danmaku Studio" and ▶ shows version info; NVENC failures explain why.</li>
+      <li>New: toolbox, sliders, new dialogs; outline, shadow, line spacing, font size 0; speed-scaled on-screen time; MP4 / MKV / MOV / AVI / GIF; save frames, test clips; four-site download (Niconico in testing, bilibili date range, shared limit with peak flattening); browser login and cookie expiry handling; format conversion; scheduler.</li>
+    </ul></li>
+  <li><b>2.0</b> <span class="tag">&lt;2026-11-15&gt;</span>
+    <ul>
+      <li>Code danmaku (mode 8) via as3-danmaku; bilibili protobuf (seg.so, BAS .bin) with detection of files corrupted by saving as text.</li>
+      <li>Downloads from bilibili (normal, packs, full history), AcFun and Ani Gamer.</li>
+      <li>New anti-overlap based on the Ani Gamer anti-overlap userscript; scrolling and top/bottom avoid each other.</li>
+      <li>BAS ghosting fix, lower memory in live preview, even sampling for files without send times.</li>
+      <li>New UI: switches, 繁中 / EN, two-part layout, source icons, reset menu; bilibili-style live preview controls.</li>
+    </ul></li>
+  <li><b>1.0</b> <span class="tag">&lt;2026-11-14&gt;</span>
+    <ul>
+      <li>First version: browser rendering plus FFmpeg overlay for bilibili XML (advanced and BAS), Niconico XML and ASS; hybrid rendering, multi-core, resume, blocking and categories.</li>
+      <li><s>1.0</s> is no longer supported; use 2.0 or later.</li>
+    </ul></li>
+</ul>
+
+<h2 id="others">Links</h2>
+<ul class="comp">
+  <li>☑ <a href="https://github.com/wow6666/danmaku_studio-AI-/releases">GitHub Releases</a> — downloads</li>
+  <li>☑ <a href="https://www.bilibili.com/opus/1270531504649273382">The author's bilibili article</a> (Chinese)</li>
+  <li>☑ <a href="https://github.com/xpadev-net/niconicomments">niconicomments</a> <span class="tag">&lt;MIT&gt;</span> — Niconico layout</li>
+  <li>☑ as3-danmaku (Bilibili-Old-Player) <span class="tag">&lt;MIT&gt;</span> — code danmaku, mode 8</li>
+  <li>☑ <a href="https://diygod.cc/bas/">BAS</a> — bilibili BAS danmaku, mode 9</li>
+  <li>☑ <a href="https://github.com/tanbatu/comment-zouryou">コメント増量</a> <span class="tag">&lt;MIT&gt;</span> — Niconico download approach</li>
+  <li>☑ danmu2ass — XML to ASS size reference</li>
+  <li>☑ Ani Gamer anti-overlap userscript (anigamerDanmakuFix) — layout</li>
+  <li>☑ <a href="https://github.com/orzogc/acfundanmu">acfundanmu</a> — AcFun danmaku API</li>
+  <li>☑ <a href="https://bilibili-api-collect.pages.dev/docs/danmaku/danmaku_view_proto">bilibili-API-collect</a> — bilibili API and protobuf fields</li>
+  <li>☑ <a href="https://zenn.dev/doma_itachi/articles/c448d4b6271d32">Fetching comments from the new Niconico</a> (Japanese) — Niconico API</li>
+  <li>☑ FFmpeg / libass, Playwright / Chromium — encoding, subtitles, browser capture</li>
+  <li>🔺 Made by the author with AI. Report mistakes on GitHub; you're free to modify the code.</li>
+</ul>
+
+<footer>Danmaku Studio 2.5 · 蔡星星のACG俱樂部 × AI</footer>
+</main>
+</div>
+
+<dialog id="zoom" aria-label="Enlarged screenshot"><img alt=""><p></p></dialog>
+<script id="cvmap" type="application/json">{}</script>
+<script id="synonyms" type="application/json">{"gpu":["NVENC"],"graphics card":["NVENC"],"nvidia":["NVENC"],"hardware":["NVENC"],"driver":["NVENC","driver"],"1050":["NVENC","GTX"],"size":["font size"],"font":["font"],"big":["font size","upscale"],"small":["font size","upscale"],"gap":["line spacing"],"spacing":["line spacing"],"crowded":["line spacing","spread evenly"],"empty":["line spacing","spread evenly"],"overlap":["anti-overlap","line spacing"],"outline":["outline"],"border":["outline"],"cookie":["cookie","SESSDATA","user_session","log in"],"login":["log in"],"expired":["expire"],"slow":["parallel","libass","hybrid"],"fast":["speed","preset"],"lag":["bililocal"],"animated":["GIF"],"format":["file format","convert"],"merge":["merge"],"bilibili":["bilibili"],"bahamut":["Ani Gamer"],"nico":["Niconico"],"block":["block","filter"],"spam":["spam"],"cache":["resume","cache"],"resume":["resume"],"transparent":["transparent layer"],"screenshot":["still preview"],"test":["test clip"],"batch":["schedule","batch"],"shutdown":["shut down"],"shortcut":["shortcut","key"],"hotkey":["shortcut"],"install":["install","pip","winget"],"advanced":["advanced","mode 7"],"flash":["code danmaku","mode 8"],"history":["history"],"subtitle":["ASS"]}</script>
+<script id="wizard-data" type="application/json">{"q":"What's the problem?","opts":[{"label":"Rendering fails or stops halfway","q":"What does the end of the log say?","opts":[{"label":"ffmpeg or Playwright not found","steps":["Install Python, FFmpeg and Playwright as in <a href=\"#install\">Install<\/a>.","<b>Reopen the command prompt<\/b> afterwards and check that <code>ffmpeg -version<\/code> prints a version.","Still failing: set the Chrome or Edge executable under Output → Performance → Browser path."]},{"label":"NVENC not available / encoder error","steps":["Press Output → Encoder → <b>Test<\/b> and read the reason (<a href=\"#output\">Output page<\/a>).","GTX 10 series: update the driver to 570–580 and use an FFmpeg release of 8.0 or older.","Set NVENC sessions to 1–2.","In a hurry: switch the encoder to H.264 (CPU)."]},{"label":"No danmaku left to show (all filtered)","steps":["On the <a href=\"#filter\">Filter page<\/a> press Count what gets blocked to see which rule blocks them.","Make sure block-by-type doesn't hide every type and font size isn't 0.","Press ★ Keep all danmaku to turn off everything that drops danmaku."]},{"label":"Something else","steps":["Render just the failing seconds with a <a href=\"#preview\">test clip<\/a> to reproduce it.","Render again with resume on; finished segments aren't redone.","Post the last lines of the log to GitHub Issues."]}]},{"label":"Danmaku missing / fewer than on the site","q":"Which one?","opts":[{"label":"No danmaku at all","steps":["Check the green line under Danmaku source: does it show the type and count?","\"Unknown danmaku format\" → convert it to bilibili XML with <a href=\"#convert\">Convert<\/a> first.","Make sure font size isn't 0 and the <a href=\"#filter\">Filter page<\/a> isn't blocking everything."]},{"label":"Fewer than on the site","steps":["<a href=\"#bili\">bilibili page<\/a>: total limit = no limit, on-screen limit = 0.","Turn off Anti-overlap, or turn on Auto-shrink in dense parts (nothing is dropped).","Niconico: set the count mode to all comments (<a href=\"#nico\">Niconico page<\/a>).","Want more: fetch bilibili full history or Niconico extra comments with <a href=\"#download\">Download<\/a>."]},{"label":"Advanced danmaku / BAS missing","steps":["<a href=\"#bili\">bilibili page<\/a>: turn on advanced, BAS and code danmaku.","Advanced danmaku off screen: set \"When off screen\" to shrink and move in.","BAS needs bas.js, which is downloaded the first time (needs internet)."]}]},{"label":"Rendering is slow","steps":["Output → Performance: make sure \"Render normal danmaku with libass\" is on.","Set parallel workers to about half your CPU cores.","Preset veryfast; keep upscale at 1.","Too many danmaku: set a limit on the <a href=\"#filter\">Filter page<\/a> or download page.","Long videos: use the <a href=\"#schedule\">scheduler<\/a> overnight and shut down when done."]},{"label":"Download fails","q":"Which site?","opts":[{"label":"bilibili","steps":["Full history and BAS packs need SESSDATA: press <code>🌐 Log in<\/code> (<a href=\"#login\">Login and cookies<\/a>).","HTTP 412: raise the cooldown per day to 2 s or more and try later.","SESSDATA expires mid-way: handled by \"When a cookie expires\"; nothing fetched is lost."]},{"label":"Ani Gamer","steps":["Paste an ani.gamer.com.tw video URL or the sn number.","The server gives at most about 3001 per episode; that's a limit, not an error.","Logging in may give more: press <code>🌐 Log in<\/code>."]},{"label":"Niconico","steps":["429 = too many requests: the program waits automatically; set the cooldown to 3–5 s.","Fetching older comments needs a login: fill in user_session or press <code>🌐 Log in<\/code>.","This is still being tested; post the log to GitHub if it fails."]},{"label":"AcFun","steps":["Paste the ac number or video URL (e.g. ac12345).","For multi-part videos use _2, _3 in the URL."]}]},{"label":"Layout looks wrong","q":"What looks wrong?","opts":[{"label":"Everything crowds the top","steps":["Raise <a href=\"#bili\">line spacing %<\/a> to 150–200.","Set Scroll distribution to Spread evenly."]},{"label":"Danmaku overlap","steps":["Turn on Anti-overlap or Auto-shrink in dense parts.","Line spacing below 100 fits more rows.","Turn on \"Top/bottom also avoid scrolling\"."]},{"label":"Text too big or small","steps":["Adjust font size % (scale explained on the <a href=\"#bili\">bilibili page<\/a>).","Low-resolution video: set upscale to 2."]},{"label":"Boxes or garbled characters","steps":["Pick a font with CJK glyphs (e.g. Microsoft JhengHei, Microsoft YaHei).","Symbols like ☢★♪ show as boxes: set the symbol font."]}]}]}</script>
+<script src="assets/site.js"></script>
+</body>
+</html>
