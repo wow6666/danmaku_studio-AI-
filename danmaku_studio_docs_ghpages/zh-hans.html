@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Danmaku Studio 使用教学</title>
+<meta name="description" content="弹幕压制工具 Danmaku Studio：把 B站、AcFun、动画疯、Niconico 弹幕压进影片的懒人包与完整教学">
+<link rel="stylesheet" href="assets/site.css">
+</head>
+<body>
+<div class="layout">
+<aside class="side">
+  <div class="brand"><div class="logo" aria-hidden="true">▶</div><div><b>Danmaku Studio</b><small>弹幕压制工具 v2.5</small></div></div>
+  <div class="langs" aria-label="语言"><a href="index.html" lang="zh-Hant">繁中</a><a href="zh-hans.html" aria-current="true" lang="zh-Hans">简中</a><a href="en.html" lang="en">EN</a></div>
+  <details class="mtoc" open><summary>目录</summary>
+  <nav class="toc" aria-label="目录">
+    <ul>
+      <li><a class="part" href="#part-quick">懒人包快速说明</a>
+        <ul>
+          <li><a href="#tips">推荐提示</a></li>
+          <li><a href="#cautions">注意事项</a></li>
+          <li><a href="#keys">常用快捷键</a></li>
+          <li><a href="#advanced">进阶操作</a></li>
+          <li><a href="#components">组件整合列表</a></li>
+        </ul></li>
+      <li><a class="part" href="#part-full">完整使用教学</a>
+        <ul>
+          <li><a href="#about">这是什么工具</a></li>
+          <li><a href="#install">安装与环境</a></li>
+          <li><a href="#quick">五步骤快速上手</a></li>
+          <li><a href="#ui">介面导览</a></li>
+          <li><a href="#bili">bilibili／AcFun 页</a></li>
+          <li><a href="#baha">动画疯页</a></li>
+          <li><a href="#nico">Niconico 页</a></li>
+          <li><a href="#filter">过滤页</a></li>
+          <li><a href="#output">输出页</a></li>
+          <li><a href="#preview">预览与试压</a></li>
+          <li><a href="#download">弹幕下载</a></li>
+          <li><a href="#convert">格式转换</a></li>
+          <li><a href="#schedule">排程压制</a></li>
+          <li><a href="#login">登入与 Cookie</a></li>
+          <li><a href="#faq">常见问题</a></li>
+          <li><a href="#versions">版本纪录</a></li>
+        </ul></li>
+      <li><a class="part" href="#others">其它</a></li>
+    </ul>
+  </nav>
+  </details>
+</aside>
+
+<main>
+<h1>Danmaku Studio 懒人包＋使用教学</h1>
+<em class="ver">本教学对应 v2.5 预览版（2026/11/16）。第一部分是懒人包，第二部分是完整教学；下载请到 <a href="https://github.com/wow6666/danmaku_studio-AI-/releases">GitHub Releases</a>。</em>
+
+<div class="search" role="search">
+  <div class="box"><span aria-hidden="true">🔍</span>
+    <input id="q" type="search" placeholder="搜寻设定或问题，例如：行距、NVENC、429、GIF、字号（繁体也可以）" autocomplete="off" aria-label="搜寻教学内容" aria-controls="results">
+    <span class="hint" id="qcount"></span></div>
+  <div class="chips" aria-label="常用搜寻">
+    <button type="button">行距</button><button type="button">NVENC</button><button type="button">字号</button><button type="button">GIF</button><button type="button">SESSDATA</button><button type="button">429</button><button type="button">断点续压</button><button type="button">防挡</button><button type="button">历史弹幕</button><button type="button">排程</button><button type="button">ASS</button><button type="button">快捷键</button>
+  </div>
+  <ul class="results" id="results" hidden></ul>
+</div>
+
+<section class="wizard" id="wizard" aria-label="我遇到问题">
+  <h3>🧭 我遇到问题</h3>
+  <div class="wbody"></div>
+</section>
+
+<h1 id="part-quick" class="part-title">第一部分：懒人包快速说明</h1>
+<em class="ver">只想看重点的看这部分就够了；每个设定的详细说明与截图在第二部分。</em>
+
+<h2 id="tips">推荐提示</h2>
+<ul>
+  <li>第一次用：选影片 → 选弹幕 → 设定输出位置 → 按 <code>● 立即压制</code>，其他全部用预设就能压。</li>
+  <li>压之前先按 <code>✂ 试压片段</code> 压 10 秒看效果，满意再整支压。</li>
+  <li>弹幕少、全挤在上方 → 调大 <code>行距 %</code>（150～200），或把分布改成 <code>平均分散</code>。</li>
+  <li>弹幕太多、叠成一团 → 开 <code>防挡</code> 或 <code>高密度自动缩小</code>，或到「过滤」页设上限。</li>
+  <li>想保留所有弹幕 → 「过滤」页按 <code>★ 保留全部弹幕</code>。</li>
+  <li>低解析度影片 → <code>放大倍率</code> 选 2，弹幕会清楚很多。</li>
+  <li>没有弹幕档 → <code>⬇ 下载弹幕</code>，贴上 BV 号、ac 号、sn 号或 sm 号。</li>
+  <li>🔺 每个设定旁的 <code>ⓘ</code> 都有说明，滑鼠移上去就看得到。</li>
+</ul>
+
+<h2 id="cautions">注意事项</h2>
+<ul>
+  <li class="warn">要先装好 Python、FFmpeg、Playwright，程式才能跑！！！</li>
+  <li>安装指令：<code>pip install playwright</code>、<code>playwright install chromium</code>、<code>winget install -e --id Gyan.FFmpeg</code></li>
+  <li>GTX 10 系列（例如 1050）用 NVENC：驱动要 570～580，FFmpeg 用 <b>8.0 以下的正式版</b>，不要用最新开发版。</li>
+  <li>载入 ASS 字幕时，字体、大小都照档案原样，设定页会全部锁住；要改请用 Aegisub。</li>
+  <li>载入哪个网站的弹幕，就只能调那个网站的页面，其他页会变灰。</li>
+  <li>SESSDATA、user_session、动画疯 Cookie <b>不要贴给别人或其他网站</b>。</li>
+  <li>动画疯没有记录发送日期，「过滤 → 始点」对它无效。</li>
+  <li>全弹幕数万条时压制会很慢，CPU 会满载，正常。</li>
+  <li>程序界面目前是繁体中文和英文（截图里的界面文字是繁体）；简体系统可以正常显示。</li>
+  <li>N站下载、浏览器登入目前还在测试，出错请把日志贴到 GitHub。</li>
+</ul>
+
+<h2 id="keys">常用快捷键</h2>
+<ul>
+  <li><b>即时预览播放器（浏览器）</b>
+    <ul>
+      <li><kbd>空白键</kbd> 播放／暂停（点一下画面也可以）</li>
+      <li><kbd>←</kbd> <kbd>→</kbd> 倒退／快转 5 秒</li>
+      <li><kbd>[</kbd> <kbd>]</kbd> 切换倍速</li>
+      <li><kbd>D</kbd> 弹幕开关　<kbd>H</kbd> 显示／隐藏弹幕数与 FPS　<kbd>F</kbd> 全萤幕（双击画面也可以）</li>
+    </ul></li>
+  <li><b>ASS 预览（ffplay）</b>：<kbd>空白键</kbd> 暂停　<kbd>←</kbd> <kbd>→</kbd> 5 秒　<kbd>↑</kbd> <kbd>↓</kbd> 1 分钟　<kbd>9</kbd> <kbd>0</kbd> 音量　<kbd>M</kbd> 静音　<kbd>S</kbd> 逐帧　<kbd>F</kbd> 全萤幕</li>
+  <li><b>程式视窗</b>：下载网址栏 <kbd>Enter</kbd> 开始下载；提示视窗 <kbd>Enter</kbd> 按主要按钮、<kbd>Esc</kbd> 关闭。</li>
+  <li><b>这个说明页</b>：<kbd>/</kbd> 搜寻　<kbd>↑</kbd> <kbd>↓</kbd> 选结果　<kbd>Enter</kbd> 跳过去　<kbd>Esc</kbd> 清空</li>
+</ul>
+
+<h2 id="advanced">进阶操作</h2>
+<ul>
+  <li><b>多个弹幕档合并</b>：「追加弹幕 → 加入…」，同类型会合并、重复的自动去掉。</li>
+  <li><b>批量压制</b>：「工具箱 → 排程压制」，每个任务可设核心数、第几批；先按 <code>检查排程</code> 再 <code>开始排程</code>。</li>
+  <li><b>定时、压完关机</b>：排程页的「定时开始」「全部完成后」。</li>
+  <li><b>格式互转</b>：「工具箱 → 格式转换」，XML、JSON、ASS 互转，也能多档合并。</li>
+  <li><b>B站历史弹幕</b>：下载页选「全弹幕（历史）」，可设日期区间与每天冷却；需要登入。</li>
+  <li><b>N站往回抓</b>：下载页的「增量倍数」，需要登入 Niconico。</li>
+  <li><b>免复制 Cookie</b>：按栏位旁的 <code>🌐 登入</code>，在跳出的浏览器登入就自动填好。</li>
+  <li><b>中断了</b>：开著 <code>断点续压</code>，用一样的设定再压一次就会接著做。</li>
+  <li><b>多组设定</b>：标题列「我的预设」存档、套用。</li>
+  <li><s>N站页要另外勾选才能换字体</s>（2.0 以后已合并成一页）</li>
+</ul>
+
+<h2 id="components">组件整合列表</h2>
+<ul class="comp">
+  <li><b>主要程式</b></li>
+  <li>☑ <b>danmaku_studio.py</b> <span class="tag">&lt;2.5&gt;</span>【主程式，tkinter 介面】</li>
+  <li>☑ <b>Python</b> <span class="tag">&lt;3.9 以上&gt;</span>【执行环境】</li>
+  <li>☑ <b>FFmpeg／ffprobe／ffplay</b> <span class="tag">&lt;必要&gt;</span>【编码、读影片资讯、ASS 预览】</li>
+  <li>☑ <b>Playwright＋Chromium</b> <span class="tag">&lt;必要&gt;</span>【逐帧截图、登入用浏览器；没有 Chromium 会改用 Chrome／Edge】</li>
+  <li><b>内建引擎</b></li>
+  <li>☑ <b>libass</b> <span class="tag">&lt;FFmpeg 内建&gt;</span>【一般弹幕渲染，快】</li>
+  <li>☑ <b>排版引擎</b> <span class="tag">&lt;内建&gt;</span>【弹幕防重叠、行距、自动缩小】</li>
+  <li>☑ <b>as3-danmaku</b> <span class="tag">&lt;MIT&gt;</span>【B站程式码弹幕 mode 8（原 Flash）】</li>
+  <li>☑ <b>bas.js</b> <span class="tag">&lt;第一次使用时下载&gt;</span>【B站 BAS 弹幕 mode 9】</li>
+  <li>☑ <b>niconicomments</b> <span class="tag">&lt;MIT&gt;</span>【Niconico 排版与弹幕艺术 CA】</li>
+  <li><b>支援的弹幕来源</b></li>
+  <li>☑ <b>bilibili</b> <span class="tag">&lt;XML、seg.so、BAS 专包&gt;</span>【普通、高级、程式码、BAS 弹幕】</li>
+  <li>☑ <b>AcFun</b> <span class="tag">&lt;JSON 新旧版&gt;</span>【用 bilibili 页的设定】</li>
+  <li>☑ <b>巴哈姆特动画疯</b> <span class="tag">&lt;XML、JSON&gt;</span>【每集最多约 3001 条】</li>
+  <li>☑ <b>Niconico</b> <span class="tag">&lt;XML、JSON&gt;</span>【官方规则数量、CA】</li>
+  <li>☑ <b>ASS 字幕</b> <span class="tag">&lt;.ass&gt;</span>【照档案原样】</li>
+  <li><b>输出格式</b></li>
+  <li>☑ <b>压进影片</b> <span class="tag">&lt;MP4、MKV、MOV、AVI、GIF&gt;</span>【H.264／H.265，CPU 或 NVENC】</li>
+  <li>☑ <b>透明弹幕层</b> <span class="tag">&lt;ProRes 4444 .mov、WebM VP9&gt;</span>【给剪辑软体叠在影片上】</li>
+  <li>☑ <b>弹幕档</b> <span class="tag">&lt;B站／巴哈／N站 XML、JSON、ASS&gt;</span>【格式转换工具】</li>
+  <li>☑ <b>丢弃清单、分析 CSV</b> <span class="tag">&lt;.csv&gt;</span>【被挡掉的弹幕、每秒密度】</li>
+</ul>
+
+<h1 id="part-full" class="part-title">第二部分：完整使用教学</h1>
+
+<h2 id="about">这是什么工具</h2>
+<ul>
+  <li>把 <b>B站、AcFun、巴哈姆特动画疯、Niconico</b> 的弹幕和 <b>ASS 字幕</b>压进影片，高级弹幕、BAS、程式码弹幕的特效完整保留。</li>
+  <li>作者：蔡星星のACG俱乐部（wow6666）与 AI 一起开发。</li>
+</ul>
+<h3 id="why">为什么要压进影片</h3>
+<ul>
+  <li>用 bililocal 即时播放全弹幕，特殊弹幕、BAS 代码弹幕很吃 CPU，影片会卡，甚至闪退。</li>
+  <li>为了顾及效能，很多华丽特效被省略，只剩平移的文字。</li>
+  <li>压进影片后：播放顺畅、特效完整。下面是同一支影片（sm212213，约 4 万条弹幕）的对比：</li>
+</ul>
+<div class="pair">
+  <figure><img src="images/common/cmp_bililocal.jpg" alt="bililocal 即时渲染画面" loading="lazy"><figcaption>bililocal 即时渲染：滑动效果不理想，很多特效被省略。</figcaption></figure>
+  <figure><img src="images/common/cmp_burned.jpg" alt="Danmaku Studio 压制版本" loading="lazy"><figcaption>Danmaku Studio 压制版本：特效与字体排版完整保留，播放不卡。</figcaption></figure>
+</div>
+<h3 id="why-not-ass">为什么不转 ASS 就好</h3>
+<ul>
+  <li>DanmakuFactory 这类工具对特殊格式支援不佳，转档常失败，或特效直接被吃掉。</li>
+  <li>本工具改成：<b>在浏览器把弹幕画出来、逐帧截图，再用 FFmpeg 叠到影片上</b>，CSS 特效与字体排版都能原样保留。</li>
+</ul>
+<h3 id="hybrid">混合渲染（速度的关键）</h3>
+<div class="flow" role="img" aria-label="混合渲染：一般弹幕交给 libass，特殊弹幕交给浏览器，最后由 FFmpeg 合成">
+  <svg viewBox="0 0 760 230" xmlns="http://www.w3.org/2000/svg">
+    <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="var(--muted)"/></marker></defs>
+    <g fill="none" stroke="var(--muted)" stroke-width="1.3">
+      <path d="M168 115H210V56H262" marker-end="url(#ar)"/><path d="M168 115H210V174H262" marker-end="url(#ar)"/>
+      <path d="M478 56H520V103H560" marker-end="url(#ar)"/><path d="M478 174H520V127H560" marker-end="url(#ar)"/>
+    </g>
+    <rect x="20" y="85" width="148" height="60" rx="6" fill="var(--bg)" stroke="var(--muted)"/>
+    <text x="94" y="111" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">弹幕档</text>
+    <text x="94" y="131" text-anchor="middle" font-size="12" fill="var(--muted)">XML／JSON／ASS</text>
+    <rect x="264" y="24" width="214" height="64" rx="6" fill="var(--bg)" stroke="var(--accent)" stroke-width="1.8"/>
+    <text x="371" y="50" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">一般弹幕 → libass</text>
+    <text x="371" y="71" text-anchor="middle" font-size="12" fill="var(--muted)">滚动、顶部、底部：快</text>
+    <rect x="264" y="142" width="214" height="64" rx="6" fill="var(--bg)" stroke="var(--pink)" stroke-width="1.8"/>
+    <text x="371" y="168" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">特殊弹幕 → 浏览器</text>
+    <text x="371" y="189" text-anchor="middle" font-size="12" fill="var(--muted)">mode 7／8／9、N站 CA：逐帧截图</text>
+    <rect x="562" y="85" width="178" height="60" rx="6" fill="var(--bg)" stroke="var(--muted)"/>
+    <text x="651" y="111" text-anchor="middle" font-size="14" font-weight="700" fill="var(--ink)">FFmpeg 合成</text>
+    <text x="651" y="131" text-anchor="middle" font-size="12" fill="var(--muted)">分段多核心＋无损合并</text>
+  </svg>
+</div>
+<ul>
+  <li>一般弹幕：浏览器只量字宽、排位置，画面交给 FFmpeg 的 libass。</li>
+  <li>高级弹幕（mode 7）、程式码弹幕（mode 8，原 Flash）、BAS（mode 9）、N站弹幕艺术（CA）：才开浏览器逐帧截图。</li>
+  <li>影片切成 10～60 秒一段，多核心同时渲染，再无损合并；可断点续压。</li>
+</ul>
+
+<h2 id="install">安装与环境</h2>
+<ul>
+  <li class="warn">要先装好 Python、FFmpeg、Playwright，程式才能跑！！！</li>
+  <li><b>Python 3.9 以上</b>：到 <a href="https://www.python.org/downloads/">python.org</a> 下载，安装时勾选「Add python.exe to PATH」。</li>
+  <li><b>Playwright 与浏览器</b>：
+<pre>pip install playwright
+playwright install chromium</pre>
+    没装 Chromium 时会改用电脑上的 Chrome 或 Edge。</li>
+  <li><b>FFmpeg（含 ffprobe、ffplay）</b>：
+<pre>winget install -e --id Gyan.FFmpeg</pre>
+    装完重开命令列，输入 <code>ffmpeg -version</code> 看得到版本就成功。</li>
+  <li><b>执行</b>：<code>python danmaku_studio.py</code></li>
+  <li>🔺 <b>GTX 10 系列（例如 GTX 1050）用 NVENC</b>：驱动最高只到 580 版。请更新到 570～580，并用 <b>FFmpeg 8.0 以下的正式版</b>；最新开发版需要 610 版驱动，10 系列装不上。可在「输出 → 编码器 → 测试」看原因。</li>
+  <li class="muted">作者测试环境：Intel Core i7-9700、DDR4 16GB、GTX 1050、Windows 11 25H2。</li>
+</ul>
+
+<h2 id="quick">五步骤快速上手</h2>
+<ol>
+  <li><b>选档案</b>：上方「弹幕获取」选影片、弹幕档、输出位置。载入后绿字会显示类型和数量（例如「B站 XML：滚动 60、程式码 3」）。没有弹幕档按 <code>⬇ 下载弹幕</code>。</li>
+  <li><b>调设定</b>：程式会自动判断来源，只开放对应的页面（B站／AcFun、动画疯、Niconico），其他页变灰锁住。</li>
+  <li><b>预览</b>：<code>▶ 即时预览</code> 在浏览器看效果，或 <code>🖼 单帧预览</code> 看某一秒。</li>
+  <li><b>试压</b>：<code>✂ 试压片段</code> 选几秒到几秒，压成 MP4 或 GIF 确认。</li>
+  <li><b>压制</b>：<code>● 立即压制</code>；要停按 <code>■ 全部停止</code>，开著断点续压的话下次会接著做。</li>
+</ol>
+<figure><img src="images/zh/actions.jpg" alt="动作列" loading="lazy"><figcaption>动作列：① 即时预览　② 单帧预览　③ 试压片段　④ 立即压制　⑤ 排程</figcaption></figure>
+
+<h2 id="ui">介面导览</h2>
+<figure><img src="images/zh/ui_main.jpg" alt="主画面" loading="lazy"><figcaption>① 弹幕获取　② 设定侧边栏　③ 设定页　④ 动作列　⑤ 压制伫列与日志</figcaption></figure>
+<ul>
+  <li><b>标题列</b>：左上 ▶ 图示点一下是版本资讯；右边有「我的预设」（存多组设定）、<code>⟲ 重置</code>、繁中／EN 切换。</li>
+  <li><b>① 弹幕获取</b>：影片、弹幕、输出位置、追加弹幕（多档合并）；右上有格式转换、下载弹幕、工具箱捷径。</li>
+  <li><b>② 设定侧边栏</b>：bilibili／AcFun、动画疯、Niconico、过滤、输出、工具箱；设定会自动存档。</li>
+  <li><b>④ 动作列</b>：即时预览、单帧预览、试压片段、立即压制、加入伫列、执行伫列、排程、全部停止、开启输出资料夹。</li>
+  <li><b>⑤ 伫列与日志</b>：状态、进度、即时 FPS、预估剩余；日志写出每一步和弹幕被挡的原因。</li>
+  <li><b>⟲ 重置选单</b>：清除档案路径、清除登入 Cookie、登出并删除登入用浏览器资料、全部设定恢复预设。</li>
+</ul>
+<figure><img src="images/zh/dlg_about.jpg" alt="版本资讯" loading="lazy" style="max-width:520px"><figcaption>点左上角 ▶：版本、执行环境、开源专案与授权。</figcaption></figure>
+
+<h2 id="bili">bilibili／AcFun 页</h2>
+<ul>
+  <li>B站 XML、B站 protobuf（seg.so）、AcFun 弹幕都用这一页。</li>
+</ul>
+<figure><img src="images/zh/bili_text.jpg" alt="bilibili 页：文字、排列与数量" loading="lazy"><figcaption>① 字号 %　② 描边粗细 %　③ 阴影　④ 滚动弹幕分布　⑤ 防挡、自动缩小等开关　⑥ 行距 %</figcaption></figure>
+<ul>
+  <li><b>① 字号 %</b>：100 = 原站大小；0 = 隐藏一般弹幕。</li>
+  <li><b>② 描边粗细 %</b>：100 = B站预设（字号的 1/22）；0 = 不描边。</li>
+  <li><b>③ 阴影</b>：以 1080p 为准的像素，照影片高度缩放。</li>
+  <li><b>符号字型</b>：☢★♪ 变方框时用来补字。</li>
+  <li><b>滚动停留秒数</b>、<b>显示区域 %</b>（50 = 只用上半部）。</li>
+  <li><b>④ 滚动弹幕分布</b>：由上往下（B站预设）／平均分散。</li>
+  <li><b>同屏上限</b>、<b>总数上限</b>（不限／依档案的弹幕池上限／自订数量）。</li>
+  <li><b>⑤ 防挡</b>（放不下的不显示）、<b>高密度自动缩小</b>、<b>顶部／底部改成滚动</b>、<b>顶部／底部也避开滚动弹幕</b>。</li>
+  <li><b>⑥ 行距 %</b>（50～300）：弹幕少、全挤在上方时调到 150～200；低于 100 会更紧密。</li>
+</ul>
+<figure><img src="images/common/linegap.jpg" alt="行距 200%" loading="lazy" style="max-width:640px"><figcaption>行距 200% 的效果：弹幕之间的间隔拉开。</figcaption></figure>
+<figure><img src="images/zh/bili_adv.jpg" alt="高级弹幕设定" loading="lazy"><figcaption>① 高级／BAS／程式码弹幕开关　② 超出画面时　③ 参考舞台</figcaption></figure>
+<ul>
+  <li><b>① 开关</b>：分别显示或隐藏高级弹幕（mode 7）、BAS（mode 9）、程式码弹幕（mode 8，原 Flash）；高级字号 %、高级不透明度 %。</li>
+  <li><b>② 超出画面时</b>：缩小并移入画面，可设缩小下限。</li>
+  <li><b>③ 参考舞台</b>：建议「自动」；也可指定 512x384、540x384、672x438。</li>
+  <li><b>字号换算标准</b>：
+    <ul>
+      <li>B站／AcFun／动画疯：字号 × 1.6 × (影片高 ÷ 1080) × 字号 %，<code>1080p 字号 25 = 40 px</code>。</li>
+      <li>动画疯：本程式下载的存成 18／25／36（小／中／大）；油猴脚本存的一律是 25。</li>
+      <li>B站高级弹幕：原始字号 × 舞台缩放 × 高级字号 %（672×438 舞台到 1080p 约 ×2.47）。</li>
+      <li>Niconico：384 px 高的舞台，小／中／大 = 18／27／39 px，再等比放大（1080p 约 ×2.81）。</li>
+    </ul></li>
+</ul>
+
+<h2 id="baha">动画疯页</h2>
+<figure><img src="images/zh/baha.jpg" alt="动画疯页" loading="lazy"><figcaption>① 字号 %　② 行距 %（其他项目跟 B站页一样）</figcaption></figure>
+<ul>
+  <li>巴哈姆特动画疯的弹幕只用这一页，跟 B站分开调。</li>
+  <li>档案有记录：出现时间（0.1 秒）、位置、颜色、发送者帐号。</li>
+  <li>没有发送日期 → 「过滤 → 始点」无效；「总数上限」改成平均挑选。</li>
+  <li>每集伺服器最多回传约 3001 条。</li>
+</ul>
+
+<h2 id="nico">Niconico 页</h2>
+<figure><img src="images/zh/nico.jpg" alt="Niconico 页" loading="lazy"><figcaption>① 弹幕数量模式　② 排版模式　③ 字体　④ 描边浓度</figcaption></figure>
+<ul>
+  <li>用开源库 niconicomments 排版，照官方播放器规则，弹幕艺术（CA）不会散掉。</li>
+  <li><b>① 弹幕数量</b>：官方规则（影片 &lt;1 分 100、&lt;5 分 250、&lt;10 分 500、其余 1000 条，只显示最新的）／增量倍数（官方 × N）／自订数量／全部弹幕。</li>
+  <li><b>② 排版模式</b>：自动（依投稿日期）／HTML5（新版播放器）／Flash（旧版播放器）。</li>
+  <li><b>③ 字体</b>：预设「官方字型（Arial＋MS PGothic）」；选其他字体时才能用粗体。</li>
+  <li><b>④ 描边浓度 %</b>、<b>弹幕大小 %</b>、<b>不透明度 %</b>。</li>
+  <li><s>N站字体要另外勾选、切到另一页调</s>（2.0 以后已合并成一页）</li>
+  <li>示范影片：<a href="https://www.nicovideo.jp/watch/sm212213">sm212213「true my heart」</a>，约 4 万条弹幕。</li>
+</ul>
+
+<h2 id="filter">过滤页</h2>
+<figure><img src="images/zh/filter.jpg" alt="过滤页" loading="lazy"><figcaption>① 屏蔽词　② 加入常用洗版规则　③ 整类屏蔽　④ 保留全部弹幕</figcaption></figure>
+<ul>
+  <li><b>① 屏蔽词</b>：一行一个；<code>/…/</code> 是正规表达式；<code>#</code> 开头是注解。</li>
+  <li><b>② 加入常用洗版规则</b>：纯标点、同字重复、片段重复。</li>
+  <li><b>③ 整类屏蔽</b>：滚动、顶部、底部、逆向。</li>
+  <li><b>合并重复</b>（标 ×N）、<b>字数上限</b>、<b>时间偏移</b>、<b>始点</b>（只显示某日期之前发送的）。</li>
+  <li><code>试算会挡掉几条</code> 先看结果；<b>④ 保留全部弹幕</b> 一键关掉所有会丢弹幕的设定。</li>
+  <li>压制时可输出「丢弃清单 CSV」，列出每条被挡的弹幕和原因。</li>
+</ul>
+
+<h2 id="output">输出页</h2>
+<figure><img src="images/zh/output.jpg" alt="输出页" loading="lazy"><figcaption>① 输出类型　② 倍速时停留时间缩短　③ 档案格式　④ 编码器与测试　⑤ 断点续压与暂存位置　⑥ NVENC 同时路数</figcaption></figure>
+<ul>
+  <li><b>① 输出类型</b>：压进影片／透明弹幕层（ProRes 4444 .mov、WebM VP9）。选透明弹幕层时「档案格式」会锁住。</li>
+  <li><b>放大倍率</b>：低解析度影片选 2，弹幕更清楚。</li>
+  <li><b>倍速</b>：弹幕出现时间跟影片同步；<b>②</b> 打开后弹幕停留时间也跟著缩短。</li>
+  <li><b>③ 档案格式</b>：MP4、MKV、MOV、AVI、GIF。AVI 只能放 H.264；GIF 没有声音、档案大，可调宽度和帧率。</li>
+  <li><b>④ 编码器</b>：H.264／H.265（CPU 或 NVENC）；<code>测试</code> 说明无法使用的原因。</li>
+  <li><b>CRF</b>：越小越清晰，18 约等于无损。<b>同时渲染数</b>：通常设 CPU 核心数的一半。</li>
+  <li><b>⑤ 断点续压</b>：分段存在 <code>C:\Users\你的帐号\.danmaku_studio\work\</code>，重开机不会消失；<code>暂存在哪里？</code> 可打开资料夹。</li>
+  <li><b>⑥ NVENC 同时路数</b>：GTX 1050 这类 2GB 显卡建议 1～2。</li>
+</ul>
+<figure><img src="images/common/speed.jpg" alt="2 倍速同步测试" loading="lazy" style="max-width:520px"><figcaption>2 倍速测试：成品 30.2 秒对到原片 60.4 秒，弹幕出现时间准确。</figcaption></figure>
+
+<h2 id="preview">预览与试压</h2>
+<ul>
+  <li><b>即时预览</b>：浏览器播放，B站风格控制列（倍速、±5 秒、音量、全萤幕、弹幕开关、不透明度），进度条上有弹幕密度曲线，旁边显示弹幕数和 FPS。</li>
+  <li><b>ASS 预览</b>：用 ffplay 播放，快捷键写在视窗标题。</li>
+  <li><b>单帧预览</b>：看某一秒，可 ±1／±5 秒切换，<code>另存为…</code> 存 PNG 或 JPG。</li>
+  <li><b>试压片段</b>：用目前所有设定压指定秒数成 MP4 或 GIF，完成后可播放、另存；只有片段和格式由试压视窗决定。</li>
+</ul>
+<div class="pair">
+  <figure><img src="images/zh/dlg_still.jpg" alt="单帧预览" loading="lazy"><figcaption>单帧预览，下方有另存与试压按钮。</figcaption></figure>
+  <figure><img src="images/zh/dlg_clip.jpg" alt="试压片段" loading="lazy" style="max-width:320px"><figcaption>试压片段：从几秒到几秒、存成 MP4 或 GIF。</figcaption></figure>
+</div>
+
+<h2 id="download">弹幕下载</h2>
+<figure><img src="images/zh/tools.jpg" alt="工具箱" loading="lazy" style="max-width:640px"><figcaption>工具箱：弹幕下载、格式转换、排程压制、密度分析、汇出分析 CSV、清除续压暂存。</figcaption></figure>
+<figure><img src="images/zh/dl_bili.jpg" alt="弹幕下载 B站" loading="lazy"><figcaption>① 网站　② 范围　③ 日期区间、最多天数、每天冷却　④ 最多保留　⑤ 超过时　⑥ Cookie 过期时</figcaption></figure>
+<ul>
+  <li>贴上网址或编号，网站自动判断，也可用 <b>① 网站</b> 下拉选单切换。</li>
+  <li><b>bilibili</b>：BV／av 号或网址（多 P 加 <code>?p=2</code>）。<b>② 范围</b> 可选目前弹幕池或全弹幕（历史弹幕逐日合并）；全弹幕与 BAS／程式码专包要 SESSDATA。
+    <ul><li><b>③</b> 历史弹幕可设日期区间、最多天数、每天抓完冷却；中途失败会保留已抓到的。</li></ul></li>
+  <li><b>AcFun</b>：ac 号或网址，不用登入。</li>
+  <li><b>动画疯</b>：sn 号或网址，最多约 3001 条；登入后弹幕可能更多。</li>
+  <li><b>④ 最多保留</b>（四站共用）＋ <b>⑤ 超过时</b>：平均随机删，或削峰（只删密度高的时段）；可在存档前套用「过滤」页；N站投稿者弹幕不算在上限。</li>
+  <li><b>⑥ Cookie 过期时</b>：见 <a href="#login">登入与 Cookie</a>。</li>
+</ul>
+<figure><img src="images/zh/dl_nico.jpg" alt="弹幕下载 Niconico" loading="lazy" style="max-width:600px"><figcaption>① 增量倍数　② 从这个时间往回　③ 引用其他影片　④ user_session 与 🌐 登入　⑤ 存成 XML／JSON</figcaption></figure>
+<ul>
+  <li><b>Niconico</b>（测试中）：sm／so／nm 号或网址。
+    <ul>
+      <li><b>①</b> 做法照「コメント増量」：登入后每个 thread 往回抓 N 次，每次最多 1000 条。</li>
+      <li><b>②</b> 指定从哪个时间往回抓；<b>③</b> 把别支影片的弹幕也加进来（例如 <code>sm9×2</code>）；可选是否抓かんたんコメント。</li>
+      <li>碰到 429（请求太多）会自动等待并放慢；<b>⑤</b> 存成 XML 或 JSON。</li>
+    </ul></li>
+</ul>
+
+<h2 id="convert">格式转换</h2>
+<figure><img src="images/zh/convert.jpg" alt="格式转换" loading="lazy"><figcaption>① 输入档案（自动辨识格式）　② 转成　③ 多个档案合并成一个　④ 开始转换</figcaption></figure>
+<ul>
+  <li><b>读取</b>：巴哈／B站／N站 XML、JSON（AcFun 新旧版、动画疯、Niconico、本程式通用格式）、ASS、B站 protobuf（seg.so／.bin）。</li>
+  <li><b>输出</b>：B站 XML、巴哈 XML、N站 XML、JSON（测试中）、ASS。</li>
+  <li>ASS 转回 XML：依 <code>\move</code>／<code>\pos</code> 判断滚动、顶部、底部；旋转、淡入、斜移这类特效字幕会略过并记在日志。</li>
+  <li>转成 ASS：字体、排列用设定各页的值，解析度自己填（例如 <code>1920x1080</code>）。</li>
+  <li><b>③</b> 多档合并只合并内容，<b>无法分别调整各档的时间偏移</b>。</li>
+  <li>可勾「套用过滤页」一起挡掉不要的弹幕。</li>
+</ul>
+
+<h2 id="schedule">排程压制</h2>
+<figure><img src="images/zh/schedule.jpg" alt="排程压制" loading="lazy" style="max-width:760px"><figcaption>① 新增任务　② 任务列表（批次、核心、编码、状态）　③ 排程规则　④ 检查排程、开始排程</figcaption></figure>
+<ol>
+  <li><b>① 加入任务</b>：<code>＋新增任务…</code> 选档案、核心数、第几批、编码器；或「用目前的档案加入」。其他设定沿用各设定页当下的值。</li>
+  <li><b>③ 设定规则</b>：同一批最多同时几个、批次间冷却几秒、失败自动重试、定时开始、全部完成后睡眠／关机（关机前 60 秒可用 <code>shutdown /a</code> 取消）。</li>
+  <li><b>④ 检查排程</b>：只检查数字和档案（找不到档案、输出撞名、核心超过本机、NVENC 太多路）。</li>
+  <li><b>④ 开始排程</b>：开始前会再自动检查一次，有错不会开始；一批做完、冷却后才开始下一批。</li>
+</ol>
+<figure><img src="images/zh/dlg_task.jpg" alt="新增任务视窗" loading="lazy" style="max-width:520px"><figcaption>新增任务视窗。</figcaption></figure>
+
+<h2 id="login">登入与 Cookie</h2>
+<ul>
+  <li><code>🌐 登入</code>（测试中）：在跳出的专用浏览器登入一次，程式自动填好 Cookie，不用开 F12 复制。</li>
+  <li>这个浏览器跟你平常的 Chrome 分开；登入状态存在 <code>.danmaku_studio\browser_login</code>，用「⟲ 重置 → 登出并删除登入用浏览器资料」清除。</li>
+  <li>Cookie 本身只放在记忆体，不写进设定档。</li>
+  <li class="warn">SESSDATA、user_session、BAHARUNE 不要贴给别人或第三方网站！</li>
+  <li><b>Cookie 过期时</b>（下载页可选）：
+    <ul>
+      <li>先在背景自动续期，不行再问我（预设）</li>
+      <li>直接开浏览器让我重新登入</li>
+      <li>每次都问我（用浏览器登入／自己贴上／取消）</li>
+      <li>直接要我贴新的</li>
+      <li>停下来，已抓到的存档</li>
+    </ul></li>
+</ul>
+<figure><img src="images/zh/dlg_cookie.jpg" alt="Cookie 过期视窗" loading="lazy" style="max-width:520px"><figcaption>Cookie 过期时的暂停视窗，已抓到的弹幕都还在。</figcaption></figure>
+
+<h2 id="faq">常见问题</h2>
+<ul>
+  <li><b>NVENC 不能用？</b> 按「输出 → 编码器 → 测试」看原因；GTX 10 系列用 570～580 版驱动＋FFmpeg 8.0 以下正式版，同时路数设 1～2。无法使用时会自动改用 CPU。</li>
+  <li><b>N站下载一直 429？</b> 每次冷却调到 3～5 秒、增量倍数调小分几次抓、不要同时用コメント増量、等 10～30 分钟再试。</li>
+  <li><b>载入 ASS 后设定页都锁住？</b> ASS 的字体大小写死在档案里，照原样显示；要改请用 Aegisub。</li>
+  <li><b>「认不出这个弹幕格式」？</b> 会先当成 B站弹幕处理，可能读不到或排版不对；先试压确认，或先用格式转换转成 B站 XML。</li>
+  <li><b>全弹幕还是叠在一起？</b> 数万条时放不下是正常的：开防挡、高密度自动缩小、降低行距，或设总数上限。</li>
+  <li><b>弹幕全挤在上方？</b> 行距调 150～200，或分布改「平均分散」。</li>
+  <li><b>seg.so 说「已损坏」？</b> 档案被当成文字存过，无法还原；用「工具箱 → 弹幕下载」重新下载，不要从开发者工具复制回应贴到记事本。</li>
+  <li><b>暂存占空间？</b> 在 <code>.danmaku_studio\work\</code>，压完自动删；没做完的可用「工具箱 → 清除续压暂存」。</li>
+  <li><b>中国大陆的电脑能正常显示吗？</b> 可以。程式用 Unicode，微软雅黑、黑体都有繁体字。</li>
+  <li><b>已知问题</b>：
+    <ul>
+      <li>N站下载、浏览器登入、NVENC 尚未在真实环境完整验证，出错请把日志贴到 GitHub。</li>
+      <li>AcFun 自己格式的高级弹幕（mode 7）目前略过。</li>
+      <li>JSON 输出仍在测试。</li>
+    </ul></li>
+</ul>
+<figure><img src="images/zh/dlg_warn.jpg" alt="认不出格式的警告" loading="lazy" style="max-width:520px"><figcaption>认不出弹幕格式时的警告视窗。</figcaption></figure>
+
+<h2 id="versions">版本纪录</h2>
+<ul>
+  <li><b>2.5 预览版</b> <span class="tag">&lt;2026/11/16&gt;</span>
+    <ul>
+      <li>修正：不适用的设定页正确锁住并变灰；视窗名称改为「弹幕压制工具 Danmaku Studio」，点左上角看版本资讯；NVENC 无法使用时说明原因。</li>
+      <li>新增：工具箱、滑杆、新提示视窗；描边、阴影、行距、字号可设 0；倍速停留时间开关；MP4／MKV／MOV／AVI／GIF；单帧另存、试压片段；四站下载（含 N站测试版、B站日期区间、统一上限与削峰）；浏览器登入与 Cookie 过期处理；格式互转；排程压制。</li>
+    </ul></li>
+  <li><b>2.0 正式版</b> <span class="tag">&lt;2026/11/15&gt;</span>
+    <ul>
+      <li>支援 mode 8 程式码弹幕（as3-danmaku 引擎）；支援 B站 protobuf（seg.so、BAS 专包 .bin），侦测被存成文字的损坏档。</li>
+      <li>B站（普通、专包、全弹幕）、AcFun、动画疯下载。</li>
+      <li>防重叠重写：参考动画疯防重叠脚本；滚动与顶部／底部互相避开。</li>
+      <li>BAS 叠影修正、即时预览省记忆体、没有发送时间的档案改平均挑选。</li>
+      <li>介面大改：开关、繁中／EN、上下两段排版、来源图示侧边栏、重置选单；即时预览改成 B站风格控制列。</li>
+    </ul></li>
+  <li><b>1.0 正式版</b> <span class="tag">&lt;2026/11/14&gt;</span>
+    <ul>
+      <li>第一个版本：浏览器渲染截图＋FFmpeg 叠合，支援 B站 XML（含高级弹幕、BAS）、Niconico XML、ASS；混合渲染、多核心、断点续压、屏蔽与分类。</li>
+      <li><s>1.0</s> 已停止支援，请直接使用 2.0 以后的版本。</li>
+    </ul></li>
+</ul>
+
+<h2 id="others">其它</h2>
+<ul class="comp">
+  <li>☑ <a href="https://github.com/wow6666/danmaku_studio-AI-/releases">GitHub Releases</a>【各版本下载】</li>
+  <li>☑ <a href="https://www.bilibili.com/opus/1270531504649273382">作者的 B站专栏</a>【特殊弹幕视频压制解决方案】</li>
+  <li>☑ <a href="https://github.com/xpadev-net/niconicomments">niconicomments</a> <span class="tag">&lt;MIT&gt;</span>【Niconico 排版与描画】</li>
+  <li>☑ as3-danmaku（Bilibili-Old-Player） <span class="tag">&lt;MIT&gt;</span>【B站程式码弹幕 mode 8】</li>
+  <li>☑ <a href="https://diygod.cc/bas/">BAS</a>【B站 BAS 弹幕 mode 9】</li>
+  <li>☑ <a href="https://github.com/tanbatu/comment-zouryou">コメント増量</a> <span class="tag">&lt;MIT&gt;</span>【Niconico 下载、增量往回抓的做法】</li>
+  <li>☑ danmu2ass【XML 转 ASS 尺寸换算的参考】</li>
+  <li>☑ 动画疯弹幕防重叠（anigamerDanmakuFix）【防重叠排列】</li>
+  <li>☑ <a href="https://github.com/orzogc/acfundanmu">acfundanmu</a>【AcFun 弹幕 API】</li>
+  <li>☑ <a href="https://bilibili-api-collect.pages.dev/docs/danmaku/danmaku_view_proto">bilibili-API-collect</a>【B站 API、protobuf 栏位】</li>
+  <li>☑ <a href="https://zenn.dev/doma_itachi/articles/c448d4b6271d32">帰ってきたニコニコからコメントを取得する</a>【N站弹幕 API】</li>
+  <li>☑ FFmpeg／libass、Playwright／Chromium【编码、字幕渲染、浏览器截图】</li>
+  <li>🔺 想取得 Niconico 全弹幕，可以研究 air.fem.jp/commeon/ 这个工具。</li>
+  <li>🔺 本工具与教学由作者与 AI 一起完成，程式或文章有错欢迎到 GitHub 提出，也可以自由修改程式码。</li>
+</ul>
+
+<footer>弹幕压制工具 Danmaku Studio 2.5 · 蔡星星のACG俱乐部 × AI</footer>
+</main>
+</div>
+
+<dialog id="zoom" aria-label="放大截图"><img alt=""><p></p></dialog>
+<script id="cvmap" type="application/json">{"檢":"检","決":"决","欄":"栏","尋":"寻","嗎":"吗","疊":"叠","閉":"闭","陣":"阵","爲":"为","載":"载","換":"换","無":"无","導":"导","擋":"挡","補":"补","鈕":"钮","歷":"历","幀":"帧","連":"连","標":"标","變":"变","佔":"占","棄":"弃","記":"记","檔":"档","藝":"艺","喫":"吃","緊":"紧","復":"复","現":"现","發":"发","螢":"萤","樣":"样","數":"数","暢":"畅","測":"测","顯":"显","獲":"获","實":"实","會":"会","懶":"懒","腦":"脑","滿":"满","議":"议","敗":"败","驟":"骤","給":"给","簡":"简","綠":"绿","問":"问","頻":"频","驗":"验","預":"预","壓":"压","調":"调","開":"开","濃":"浓","兩":"两","內":"内","萬":"万","鍵":"键","設":"设","學":"学","擠":"挤","瀏":"浏","裏":"里","陸":"陆","階":"阶","適":"适","隱":"隐","轉":"转","稱":"称","細":"细","詞":"词","過":"过","條":"条","務":"务","達":"达","峯":"峰","樂":"乐","選":"选","別":"别","級":"级","見":"见","結":"结","腳":"脚","約":"约","顧":"顾","舊":"旧","頂":"顶","佇":"伫","規":"规","薦":"荐","餘":"余","試":"试","還":"还","當":"当","訊":"讯","卻":"却","啓":"启","語":"语","讀":"读","動":"动","斷":"断","刪":"删","專":"专","這":"这","網":"网","讓":"让","麗":"丽","側":"侧","類":"类","暫":"暂","來":"来","態":"态","臺":"台","應":"应","準":"准","雙":"双","間":"间","單":"单","濾":"滤","縮":"缩","項":"项","維":"维","視":"视","圍":"围","處":"处","與":"与","範":"范","鍾":"钟","題":"题","錯":"错","時":"时","驅":"驱","瘋":"疯","庫":"库","損":"损","機":"机","紀":"纪","亂":"乱","執":"执","軟":"软","歡":"欢","體":"体","頭":"头","關":"关","說":"说","順":"顺","麼":"么","個":"个","夠":"够","續":"续","隨":"随","請":"请","鎖":"锁","憶":"忆","寫":"写","壞":"坏","話":"话","錄":"录","確":"确","貼":"贴","號":"号","並":"并","權":"权","證":"证","畫":"画","識":"识","滾":"滚","閃":"闪","邊":"边","後":"后","則":"则","幾":"几","誤":"误","狀":"状","線":"线","詳":"详","覽":"览","統":"统","聲":"声","對":"对","國":"国","圖":"图","編":"编","層":"层","參":"参","總":"总","從":"从","輸":"输","華":"华","點":"点","頁":"页","偵":"侦","帳":"帐","沒":"没","寬":"宽","匯":"汇","陰":"阴","電":"电","訂":"订","種":"种","徑":"径","資":"资","長":"长","丟":"丢","顏":"颜","裝":"装","擊":"击","進":"进","夾":"夹","認":"认","碼":"码","傳":"传","純":"纯","風":"风","環":"环","區":"区","術":"术","彈":"弹","組":"组","團":"团","靜":"静","輯":"辑","於":"于"}</script>
+<script id="synonyms" type="application/json">{"显卡":["NVENC"],"gpu":["NVENC"],"n卡":["NVENC"],"1050":["NVENC","GTX"],"硬体加速":["NVENC"],"硬件加速":["NVENC"],"驱动":["NVENC","驱动"],"字体大小":["字号"],"字大小":["字号"],"字太大":["字号"],"字太小":["字号","放大倍率"],"大小":["字号"],"字型":["字体"],"边框":["描边"],"黑边":["描边"],"间距":["行距"],"行高":["行距"],"太挤":["行距","平均分散"],"太空":["行距","平均分散"],"重叠":["防挡","行距"],"叠在一起":["防挡"],"遮挡":["防挡"],"cookie":["Cookie","SESSDATA","user_session","登入"],"登录":["登入"],"过期":["过期"],"速度":["倍速","CRF","同时渲染"],"加速":["倍速"],"慢":["同时渲染","libass","混合渲染"],"卡":["bililocal","同时渲染"],"动图":["GIF"],"格式":["档案格式","格式转换"],"转档":["格式转换"],"转换":["格式转换"],"合并":["合并"],"下载":["弹幕下载","下载"],"b站":["bilibili","B站"],"巴哈":["动画疯","巴哈"],"n站":["Niconico","N站"],"nico":["Niconico"],"a站":["AcFun"],"屏蔽":["屏蔽","过滤"],"过滤":["过滤","屏蔽"],"洗版":["洗版"],"刷屏":["洗版"],"暂存":["暂存","断点续压"],"续压":["断点续压"],"缓存":["暂存"],"透明":["透明弹幕层"],"截图":["单帧预览"],"预览":["预览"],"试压":["试压片段"],"批量":["排程"],"关机":["关机"],"快捷键":["快捷键","kbd"],"热键":["快捷键"],"安装":["安装","pip","winget"],"ffmpeg":["FFmpeg"],"高级弹幕":["高级","mode 7"],"bas":["BAS"],"flash":["程式码弹幕","mode 8"],"代码弹幕":["程式码弹幕"],"429":["429"],"损坏":["损坏"],"历史":["历史弹幕"],"视频":["影片"],"设置":["设定"],"文件":["档案"],"字幕":["ASS"],"顯卡":["NVENC"],"硬體加速":["NVENC"],"驅動":["NVENC","驱动"],"字體大小":["字号"],"邊框":["描边"],"黑邊":["描边"],"間距":["行距"],"太擠":["行距","平均分散"],"重疊":["防挡","行距"],"疊在一起":["防挡"],"遮擋":["防挡"],"登錄":["登入"],"過期":["过期"],"動圖":["GIF"],"轉檔":["格式转换"],"轉換":["格式转换"],"合併":["合并"],"下載":["弹幕下载","下载"],"過濾":["过滤","屏蔽"],"暫存":["暂存","断点续压"],"續壓":["断点续压"],"緩存":["暂存"],"截圖":["单帧预览"],"預覽":["预览"],"試壓":["试压片段"],"關機":["关机"],"快捷鍵":["快捷键","kbd"],"熱鍵":["快捷键"],"安裝":["安装","pip","winget"],"高級彈幕":["高级","mode 7"],"代碼彈幕":["程式码弹幕"],"損壞":["损坏"],"歷史":["历史弹幕"],"視頻":["影片"],"設置":["设定"]}</script>
+<script id="wizard-data" type="application/json">{"q":"遇到什么问题？","opts":[{"label":"压不出来／压到一半失败","q":"日志最后写了什么？","opts":[{"label":"找不到 ffmpeg 或 Playwright","steps":["照 <a href=\"#install\">安装与环境<\/a> 装好 Python、FFmpeg、Playwright。","装完<b>重开命令列<\/b>再执行，输入 <code>ffmpeg -version<\/code> 确认看得到版本。","还是不行：在「输出 → 效能 → 浏览器路径」指定 Chrome 或 Edge 的执行档。"]},{"label":"NVENC 无法使用／编码器错误","steps":["按「输出 → 编码器 → <b>测试<\/b>」，看它说的原因（<a href=\"#output\">输出页<\/a>）。","GTX 10 系列：驱动更新到 570～580，FFmpeg 换成 8.0 以下的正式版。","「NVENC 同时路数」调成 1～2。","急著要：编码器先改「H.264（CPU）」。"]},{"label":"没有弹幕可以显示（全部被过滤）","steps":["到 <a href=\"#filter\">过滤页<\/a> 按「试算会挡掉几条」，看是哪个规则挡的。","确认「整类屏蔽」没有把滚动、顶部、底部全关掉；字号 % 不是 0。","按「★ 保留全部弹幕」一键关掉所有会丢弹幕的设定。"]},{"label":"其他错误","steps":["先用 <a href=\"#preview\">试压片段<\/a> 压出问题的那几秒，确认能不能重现。","开著断点续压再压一次，已完成的分段不会重做。","把日志最后几行贴到 GitHub Issues。"]}]},{"label":"弹幕不见／比网站上少","q":"是哪一种？","opts":[{"label":"完全没有弹幕","steps":["看「弹幕获取」下面的绿字，有没有正确显示弹幕类型和数量。","跳出「认不出这个弹幕格式」→ 先用 <a href=\"#convert\">格式转换<\/a> 转成 B站 XML。","确认字号 % 不是 0、<a href=\"#filter\">过滤页<\/a> 没有全挡掉。"]},{"label":"数量比网站上少","steps":["<a href=\"#bili\">bilibili 页<\/a>：总数上限改「不限」、同屏上限 0。","关掉「防挡」或改开「高密度自动缩小」（放不下的不会被丢）。","Niconico：数量模式改「全部弹幕」（<a href=\"#nico\">Niconico 页<\/a>）。","想要更多：用 <a href=\"#download\">弹幕下载<\/a> 抓 B站全弹幕或 N站增量。"]},{"label":"高级弹幕／BAS 不见","steps":["<a href=\"#bili\">bilibili 页<\/a> 确认「显示高级弹幕／BAS／程式码弹幕」都打开。","高级弹幕跑出画面：把「超出画面时」改成缩小并移入画面。","BAS 需要 bas.js：第一次使用时要能连上网路下载。"]}]},{"label":"压得很慢","steps":["「输出 → 效能」确认「普通弹幕用 libass 渲染」有打开。","「同时渲染数」设 CPU 核心数的一半左右。","「速度」改 veryfast；「放大倍率」维持 1。","全弹幕太多：到 <a href=\"#filter\">过滤页<\/a> 或下载页设上限。","长片可以用 <a href=\"#schedule\">排程压制<\/a> 排在晚上跑，压完自动关机。"]},{"label":"下载失败","q":"哪个网站？","opts":[{"label":"bilibili","steps":["全弹幕和 BAS 专包要 SESSDATA：按栏位旁的 <code>🌐 登入<\/code>（<a href=\"#login\">登入与 Cookie<\/a>）。","出现 412：把「每天抓完冷却」调到 2 秒以上，过一阵子再抓。","中途说 SESSDATA 过期：照「Cookie 过期时」的设定处理，已抓到的不会丢。"]},{"label":"动画疯","steps":["贴 ani.gamer.com.tw 的影片网址或 sn 数字。","每集伺服器最多给约 3001 条，这是上限不是错误。","登入后弹幕可能更多：按 <code>🌐 登入<\/code>。"]},{"label":"Niconico","steps":["429 = 请求太多：程式会自动等待；把「每次冷却」调到 3～5 秒。","增量、往回抓要登入：填 user_session 或按 <code>🌐 登入<\/code>。","这部分还在测试，失败请把日志贴到 GitHub。"]},{"label":"AcFun","steps":["贴 ac 号或影片网址（例如 ac12345）。","多分 P 的影片用网址里的 _2、_3 指定。"]}]},{"label":"排版不好看","q":"哪里不好看？","opts":[{"label":"弹幕全挤在上方","steps":["<a href=\"#bili\">行距 %<\/a> 调到 150～200。","「滚动弹幕分布」改「平均分散」。"]},{"label":"弹幕叠在一起","steps":["打开「防挡」或「高密度自动缩小」。","行距调到 100 以下可以塞更多行。","「顶部／底部也避开滚动弹幕」打开。"]},{"label":"字太大或太小","steps":["调「字号 %」（换算标准见 <a href=\"#bili\">bilibili 页<\/a>）。","低解析度影片：「放大倍率」选 2。"]},{"label":"字有方框、乱码","steps":["换一个有中日文的字体（例如微软正黑体、微软雅黑）。","☢★♪ 这类符号变方框：设定「符号字型」。"]}]}]}</script>
+<script src="assets/site.js"></script>
+</body>
+</html>
