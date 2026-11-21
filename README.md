@@ -1,4 +1,4 @@
-https://wow6666.github.io/danmaku_studio-AI-/index.html   
+https://claude.ai/artifact/X3gu5AYDwCXZ5rQ3iovx8o
 詳情請見此說明文章,此程式AI生成的我只是負責下指令調並非本人寫
 100% 由 AI 生成
 
